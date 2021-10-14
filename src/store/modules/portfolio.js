@@ -84,7 +84,6 @@ export default  {
           }
         }
       })
-
       return stocks
     },
     balance(state) {

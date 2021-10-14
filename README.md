@@ -1,4 +1,11 @@
-# stock-trader
+# Stock Trader Project
+
+A simple stock trader website made with VueJS
+## Deploy static website on S3
+
+```bash
+bash deploy.sh
+```
 
 ## Project setup
 ```

@@ -1,0 +1,5 @@
+pymongo
+pika
+urllib3
+bs4
+lxml

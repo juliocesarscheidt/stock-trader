@@ -1,0 +1,93 @@
+version: '3.4'
+
+services:
+  stock-crawler:
+    container_name: stock-crawler
+    hostname: stock-crawler
+    image: juliocesarmidia/stock-crawler:latest
+    build:
+      context: ./stock-crawler
+    environment:
+      MONGO_URI: mongodb://root:admin@mongo:27017
+      RABBITMQ_URI: amqp://dev:dev@rabbitmq/?heartbeat=30
+      RABBITMQ_QUEUE: stocks_queue
+    networks:
+      - subnet_0
+    restart: on-failure
+
+  stock-api:
+    container_name: stock-api
+    hostname: stock-api
+    image: juliocesarmidia/stock-api:latest
+    build:
+      context: ./stock-api
+    environment:
+      FLASK_ENV: development
+      MONGO_URI: mongodb://root:admin@mongo:27017
+      RABBITMQ_URI: amqp://dev:dev@rabbitmq/?heartbeat=30
+      RABBITMQ_EXCHANGE: stocks_queue_exchange
+      RABBITMQ_ROUTING_KEY: stocks_queue
+    networks:
+      - subnet_0
+    restart: on-failure
+    ports:
+      - 5050:5050
+
+  stock-ui:
+    container_name: stock-ui
+    hostname: stock-ui
+    image: juliocesarmidia/stock-ui:latest
+    build:
+      context: ./stock-ui
+    environment:
+      FLASK_ENV: development
+      API_URI: stock-api:5050
+    networks:
+      - subnet_0
+    restart: on-failure
+    ports:
+      - 8080:8080
+
+  mongo:
+    container_name: mongo
+    hostname: mongo
+    image: mongo:5.0
+    command: mongod --config /etc/mongo/mongod.conf --storageEngine wiredTiger
+    environment:
+      MONGO_INITDB_DATABASE: stocks
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: admin
+    networks:
+      - subnet_0
+    restart: on-failure
+    ports:
+      - 27017:27017
+    volumes:
+      - mongo-data:/data/db:rw
+      - mongo-home:/home/mongodb:rw
+      - ./mongo/mongod.conf:/etc/mongo/mongod.conf:ro
+      - ./mongo/init.sh:/docker-entrypoint-initdb.d/init.sh:ro
+      - ./mongo/init.js:/init.js:ro
+
+  rabbitmq:
+    container_name: rabbitmq
+    hostname: rabbitmq
+    image: juliocesarmidia/rabbitmq:latest
+    build:
+      context: ./rabbitmq
+    ports:
+      - 5872:5672
+      - 15872:15672
+    networks:
+      - subnet_0
+    restart: on-failure
+
+networks:
+  subnet_0:
+    driver: bridge
+
+volumes:
+  mongo-data: {}
+  mongo-home: {}
+
+secrets: {}

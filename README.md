@@ -1,36 +1,27 @@
-# Stock Trader Project
-
-A simple stock trader website made with VueJS
-## Deploy static website on S3
+# Stocks App
 
 ```bash
-bash deploy.sh
-```
 
-## Project setup
-```
-npm install
-```
+docker-compose up -d mongo
+docker-compose logs -f --tail 50 mongo
 
-### Compiles and hot-reloads for development
-```
-npm run serve
-```
+docker-compose exec mongo bash
 
-### Compiles and minifies for production
-```
-npm run build
-```
 
-### Run your tests
-```
-npm run test
-```
+docker-compose up -d --build rabbitmq
+docker-compose logs -f --tail 50 rabbitmq
 
-### Lints and fixes files
-```
-npm run lint
-```
 
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
+docker-compose up -d --build stock-api
+docker-compose logs -f --tail 50 stock-api
+
+curl --silent -X GET 'http://localhost:5050/v1/stocks/last'
+curl --silent -X GET 'http://localhost:5050/v1/stocks/last/itub4'
+curl --silent -X GET 'http://localhost:5050/v1/stocks/last/itsa4'
+STOCKS=('itub4' 'itsa4' 'bbdc3' 'cash3' 'bbas3' 'lwsa3')
+
+
+docker-compose up -d --build stock-crawler
+docker-compose logs -f --tail 50 stock-crawler
+
+```

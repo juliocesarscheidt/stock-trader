@@ -6,9 +6,9 @@ from .logger import log
 from .publisher import publish
 from .utils import get_rabbitmq_channel
 
-RABBITMQ_URI = os.environ.get('RABBITMQ_URI', 'amqp://dev:dev@rabbitmq/?heartbeat=30')
-RABBITMQ_EXCHANGE = os.environ.get('RABBITMQ_EXCHANGE', 'stocks_queue_exchange')
-RABBITMQ_ROUTING_KEY = os.environ.get('RABBITMQ_ROUTING_KEY', 'stocks_queue')
+RABBITMQ_URI = os.environ.get('RABBITMQ_URI')
+RABBITMQ_EXCHANGE = os.environ.get('RABBITMQ_EXCHANGE')
+RABBITMQ_ROUTING_KEY = os.environ.get('RABBITMQ_ROUTING_KEY')
 
 class Stock(Resource):
   def __init__(self, history_collection):

@@ -6,8 +6,8 @@ from .crawler import crawl_stock_price
 from .utils import convert_value_to_float, get_datetime_now_iso, get_rabbitmq_channel
 from .logger import log
 
-RABBITMQ_URI = os.environ.get('RABBITMQ_URI', 'amqp://dev:dev@rabbitmq/?heartbeat=30')
-RABBITMQ_QUEUE = os.environ.get('RABBITMQ_QUEUE', 'stocks_queue')
+RABBITMQ_URI = os.environ.get('RABBITMQ_URI')
+RABBITMQ_QUEUE = os.environ.get('RABBITMQ_QUEUE')
 
 def generate_callback(http_client, history_collection):
   def callback_queue(__channel, __method, __properties, __body):

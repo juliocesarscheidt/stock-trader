@@ -60,7 +60,12 @@ export default {
     },
     async searchStock() {
       if (!this.stockName) {
-        alert('Invalid stock name')
+        this.$notify({
+          group: 'notification',
+          type: 'error',
+          title: 'Error',
+          text: 'Invalid stock name!'
+        });
         return
       }
       this.searchingStock = true
@@ -75,7 +80,12 @@ export default {
         } else {
           stocks.push(stock)
         }
-        alert('The stock was found')
+        this.$notify({
+          group: 'notification',
+          type: 'success',
+          title: 'Success',
+          text: 'The stock was found!'
+        });
 
         this.$store.commit('setStocks', stocks)
         this.$router.push({name: 'Stocks'})
@@ -83,15 +93,24 @@ export default {
         this.searchingStock = false
       } else {
         if (this.searchRetries >= this.searchMaxRetries) {
-          alert('The stock was NOT found')
+          this.$notify({
+            group: 'notification',
+            type: 'error',
+            title: 'Error',
+            text: 'The stock was NOT found!'
+          });
           this.clearTimer()
           this.searchingStock = false
           return
         }
+        this.$notify({
+          group: 'notification',
+          type: 'info',
+          title: 'Info',
+          text: 'The stock is being consulted...'
+        });
 
-        alert('The stock is being consulted...')
         const vm = this
-
         this.searchStockTimeout = setTimeout(() => {
           vm.searchRetries += 1
           vm.searchStock()

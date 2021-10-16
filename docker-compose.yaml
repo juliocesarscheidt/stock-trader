@@ -8,9 +8,9 @@ services:
     build:
       context: ./stock-crawler
     environment:
-      MONGO_URI: mongodb://root:admin@mongo:27017
-      RABBITMQ_URI: amqp://dev:dev@rabbitmq/?heartbeat=30
-      RABBITMQ_QUEUE: stocks_queue
+      MONGO_URI: mongodb://${MONGO_INITDB_ROOT_USERNAME}:${MONGO_INITDB_ROOT_PASSWORD}@mongo:27017
+      RABBITMQ_URI: amqp://${RABBITMQ_USERNAME}:${RABBITMQ_PASSWORD}@rabbitmq/?heartbeat=30
+      RABBITMQ_QUEUE: ${RABBITMQ_QUEUE}
     networks:
       - subnet_0
     restart: on-failure
@@ -21,17 +21,17 @@ services:
     image: juliocesarmidia/stock-api:latest
     build:
       context: ./stock-api
+    ports:
+      - 5050:5050
     environment:
-      MONGO_URI: mongodb://root:admin@mongo:27017
-      RABBITMQ_URI: amqp://dev:dev@rabbitmq/?heartbeat=30
-      RABBITMQ_EXCHANGE: stocks_queue_exchange
-      RABBITMQ_ROUTING_KEY: stocks_queue
+      MONGO_URI: mongodb://${MONGO_INITDB_ROOT_USERNAME}:${MONGO_INITDB_ROOT_PASSWORD}@mongo:27017
+      RABBITMQ_URI: amqp://${RABBITMQ_USERNAME}:${RABBITMQ_PASSWORD}@rabbitmq/?heartbeat=30
+      RABBITMQ_EXCHANGE: ${RABBITMQ_EXCHANGE}
+      RABBITMQ_ROUTING_KEY: ${RABBITMQ_ROUTING_KEY}
       FLASK_ENV: development
     networks:
       - subnet_0
     restart: on-failure
-    ports:
-      - 5050:5050
 
   stock-ui:
     container_name: stock-ui
@@ -40,13 +40,13 @@ services:
     build:
       context: ./stock-ui
       dockerfile: Development.Dockerfile
+    ports:
+      - 8080:8080
     environment:
       NODE_ENV: development
     networks:
       - subnet_0
     restart: on-failure
-    ports:
-      - 8080:8080
     volumes:
       - ./stock-ui:/app:rw
       - stock-ui-node-modules:/app/node_modules:rw
@@ -56,15 +56,15 @@ services:
     hostname: mongo
     image: mongo:5.0
     command: mongod --config /etc/mongo/mongod.conf --storageEngine wiredTiger
+    ports:
+      - 28017:27017
     environment:
       MONGO_INITDB_DATABASE: stocks
-      MONGO_INITDB_ROOT_USERNAME: ${MONGO_INITDB_ROOT_USERNAME:-root}
-      MONGO_INITDB_ROOT_PASSWORD: ${MONGO_INITDB_ROOT_PASSWORD:-admin}
+      MONGO_INITDB_ROOT_USERNAME: ${MONGO_INITDB_ROOT_USERNAME}
+      MONGO_INITDB_ROOT_PASSWORD: ${MONGO_INITDB_ROOT_PASSWORD}
     networks:
       - subnet_0
     restart: on-failure
-    ports:
-      - 27017:27017
     volumes:
       - mongo-data:/data/db:rw
       - mongo-home:/home/mongodb:rw
@@ -81,6 +81,12 @@ services:
     ports:
       - 5872:5672
       - 15872:15672
+    environment:
+      RABBITMQ_USERNAME: ${RABBITMQ_USERNAME}
+      RABBITMQ_PASSWORD: ${RABBITMQ_PASSWORD}
+      RABBITMQ_QUEUE: ${RABBITMQ_QUEUE}
+      RABBITMQ_EXCHANGE: ${RABBITMQ_EXCHANGE}
+      RABBITMQ_ROUTING_KEY: ${RABBITMQ_ROUTING_KEY}
     networks:
       - subnet_0
     restart: on-failure

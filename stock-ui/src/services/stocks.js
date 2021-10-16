@@ -13,9 +13,7 @@ const getLastStockByName = async (name) => {
         name: data.name,
         price: data.price
       }
-    }).catch((err) => {
-      console.error(err)
-    })
+    });
 }
 
 const getLastStocks = async () => {
@@ -31,9 +29,7 @@ const getLastStocks = async () => {
         name: stock.name,
         price: stock.price
       }))
-    }).catch((err) => {
-      console.error(err)
-    })
+    });
 }
 
 export {

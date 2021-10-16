@@ -16,7 +16,7 @@ app = Flask(__name__)
 cors = CORS(app)
 api = Api(app)
 
-MONGO_URI = os.environ.get('MONGO_URI', 'mongodb://root:admin@127.0.0.1:27017')
+MONGO_URI = os.environ.get('MONGO_URI')
 
 if __name__ in '__main__':
   log('[INFO] Starting API...')

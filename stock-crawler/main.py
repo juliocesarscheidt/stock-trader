@@ -14,7 +14,7 @@ from modules.logger import log
 from modules.consumer import consume
 from modules.processor import process
 
-MONGO_URI = os.environ.get('MONGO_URI', 'mongodb://root:admin@127.0.0.1:27017')
+MONGO_URI = os.environ.get('MONGO_URI')
 
 def consume_and_crawl(__http_client, __history_collection):
   consume(__http_client, __history_collection)

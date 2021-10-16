@@ -12,5 +12,9 @@ It is split into small services, each one with some purpose.
 This will start all services, then access the UI on <http://localhost:8080>
 
 ```bash
-docker-compose up -d
+# infrastructure
+docker-compose up -d --build mongo rabbitmq
+
+# services
+docker-compose up -d --build stock-crawler stock-api stock-ui
 ```

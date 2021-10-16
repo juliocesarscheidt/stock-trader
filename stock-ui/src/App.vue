@@ -8,6 +8,7 @@
         </transition>
       </v-container>
     </v-content>
+    <notifications position="top right" group="notification" class="my-4 mx-4"/>
   </v-app>
 </template>
 

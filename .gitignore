@@ -22,5 +22,4 @@ yarn-error.log*
 
 __pycache__
 *.log
-.env
 logs

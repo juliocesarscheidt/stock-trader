@@ -50,11 +50,21 @@ export default {
   methods: {
     buyStock() {
       if (this.invalidAmount) {
-        alert('Invalid amount!');
+        this.$notify({
+          group: 'notification',
+          type: 'error',
+          title: 'Error',
+          text: 'Invalid amount!'
+        });
         return;
       }
       if (this.insufficientBalance) {
-        alert('Insufficient balance!');
+        this.$notify({
+          group: 'notification',
+          type: 'error',
+          title: 'Error',
+          text: 'Insufficient balance!'
+        });
         return;
       }
       const order = {

@@ -17,7 +17,6 @@ docker-compose exec mongo bash -c \
 mongo --host 127.0.0.1 --port 27017
 mongo --host 127.0.0.1 --port 27017 -- stocks
 
-
 use admin;
 db.auth("root", "admin");
 
@@ -25,7 +24,6 @@ show dbs;
 
 db.runCommand({connectionStatus: 1});
 show roles;
-
 
 use stocks;
 show collections;
@@ -79,15 +77,5 @@ db.history.aggregate(
     }
   ]
 )
-
-
-# mongodb+srv://<username>:<password>@<cluster-name>:port/<database>
-
-# mongodb+srv://root:admin@mongo:27017/stocks
-
-# mongodb://127.0.0.1:27017
-
-
-# docker container run --rm -it --name mongo mongo:5.0 bash
 
 ```

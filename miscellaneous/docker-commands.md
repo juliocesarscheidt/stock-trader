@@ -20,7 +20,7 @@ docker-compose logs -f --tail 50 stock-crawler
 docker-compose up -d --build stock-api
 docker-compose logs -f --tail 50 stock-api
 
-# try out
+# try out API
 curl --silent -X GET 'http://localhost:5050/v1/stocks/last'
 
 STOCKS=('itub4' 'itsa4' 'bbdc3' 'cash3' 'bbas3' 'lwsa3' 'lame4' 'ciel3' 'embr3')

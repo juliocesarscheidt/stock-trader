@@ -22,11 +22,11 @@ services:
     build:
       context: ./stock-api
     environment:
-      FLASK_ENV: development
       MONGO_URI: mongodb://root:admin@mongo:27017
       RABBITMQ_URI: amqp://dev:dev@rabbitmq/?heartbeat=30
       RABBITMQ_EXCHANGE: stocks_queue_exchange
       RABBITMQ_ROUTING_KEY: stocks_queue
+      FLASK_ENV: development
     networks:
       - subnet_0
     restart: on-failure
@@ -39,14 +39,17 @@ services:
     image: juliocesarmidia/stock-ui:latest
     build:
       context: ./stock-ui
+      dockerfile: Development.Dockerfile
     environment:
-      FLASK_ENV: development
-      API_URI: stock-api:5050
+      NODE_ENV: development
     networks:
       - subnet_0
     restart: on-failure
     ports:
       - 8080:8080
+    volumes:
+      - ./stock-ui:/app:rw
+      - stock-ui-node-modules:/app/node_modules:rw
 
   mongo:
     container_name: mongo
@@ -89,5 +92,6 @@ networks:
 volumes:
   mongo-data: {}
   mongo-home: {}
+  stock-ui-node-modules: {}
 
 secrets: {}

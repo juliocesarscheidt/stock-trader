@@ -29,7 +29,7 @@ class Stock(Resource):
       channel = get_rabbitmq_channel(RABBITMQ_URI)
       # publish to queue, to be crawled
       publish(channel, {'name': name}, RABBITMQ_EXCHANGE, RABBITMQ_ROUTING_KEY)
-      return {}
+      return None
     return data
 
   def get_last_stocks(self):

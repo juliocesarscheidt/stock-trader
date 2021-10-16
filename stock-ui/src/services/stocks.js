@@ -1,16 +1,42 @@
-const randomBetweeen = (min, max) => Math.round(Math.random() * (max - min + 1) + min)
+import axios from 'axios'
 
-const getStocks = () => {
-  const stocks = [
-    { id: 1, name: 'BMW', price: randomBetweeen(75, 250) },
-    { id: 2, name: 'Google', price: randomBetweeen(75, 250) },
-    { id: 3, name: 'Apple', price: randomBetweeen(75, 250) },
-    { id: 4, name: 'Tesla', price: randomBetweeen(75, 250) }
-  ]
+const getLastStockByName = async (name) => {
+  return axios
+    .get(`/api/v1/stocks/last/${name}`)
+    .then((response) => {
+      if (!response.data.data) {
+        return null
+      }
+      const { data } = response.data
+      return {
+        id: data.id,
+        name: data.name,
+        price: data.price
+      }
+    }).catch((err) => {
+      console.error(err)
+    })
+}
 
-  return new Promise((resolve) => resolve(stocks))
+const getLastStocks = async () => {
+  return axios
+    .get('/api/v1/stocks/last')
+    .then((response) => {
+      if (!response.data.data) {
+        return null
+      }
+      const { data } = response.data
+      return data.map((stock) => ({
+        id: stock.id,
+        name: stock.name,
+        price: stock.price
+      }))
+    }).catch((err) => {
+      console.error(err)
+    })
 }
 
 export {
-  getStocks
+  getLastStockByName,
+  getLastStocks
 }

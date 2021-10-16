@@ -1,10 +1,17 @@
 <template>
   <v-layout row wrap>
-    <Stock
-      v-for="stock in stocks"
-      :key="stock.id"
-      :stock="stock"
-    />
+    <template v-if="stocks.length > 0">
+      <Stock
+        v-for="stock in stocks"
+        :key="stock.id"
+        :stock="stock"
+      />
+    </template>
+    <template v-else>
+      <span class="grey--text text--darken-2">
+        Any stock found
+      </span>
+    </template>
   </v-layout>
 </template>
 

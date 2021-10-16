@@ -5,6 +5,7 @@ import pika
 from pymongo import MongoClient
 from flask import Flask
 from flask_restful import Api
+from flask_cors import CORS
 
 from modules.stocks import LastStocks, LastStockByName
 from modules.utils import convert_value_to_float, get_datetime_now_iso, get_mongo_client
@@ -12,6 +13,7 @@ from modules.logger import log
 
 # application setup
 app = Flask(__name__)
+cors = CORS(app)
 api = Api(app)
 
 MONGO_URI = os.environ.get('MONGO_URI', 'mongodb://root:admin@127.0.0.1:27017/')

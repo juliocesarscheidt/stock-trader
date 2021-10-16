@@ -1,0 +1,74 @@
+swagger: '2.0'
+info:
+  description: Description
+  version: v1
+  title: Rest API with Flask
+  contact:
+    name: Julio Cesar
+    email: julio@blackdevs.com.br
+
+tags:
+  - name: Stocks
+    description: Stocks Resource
+
+paths:
+  /v1/stocks/last:
+    get:
+      tags:
+        - Stocks
+      summary: Get last stocks
+      operationId: getLastStocks
+      produces:
+        - application/json
+      responses:
+        '200':
+          description: OK
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Stock'
+        '500':
+          description: Internal Server Error
+
+  /v1/stocks/last/{name}:
+    get:
+      tags:
+        - Stocks
+      summary: Get last stock by name
+      operationId: getLastStockByName
+      produces:
+        - application/json
+      parameters:
+        - name: name
+          in: path
+          description: name
+          required: true
+          type: string
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/Stock'
+        '500':
+          description: Internal Server Error
+
+definitions:
+  Stock:
+    type: object
+    properties:
+      status:
+        type: string
+        example: 'OK'
+      id:
+        type: string
+        example: 'UUID'
+      name:
+        type: string
+        example: 'itub4'
+      price:
+        type: number
+        example: 0.00
+      date:
+        type: string
+        format: date-time
+        example: '2021-01-01T00:00:00.000Z'

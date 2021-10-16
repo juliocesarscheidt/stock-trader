@@ -9,7 +9,7 @@ It is split into small services, each one with some purpose.
 
 ## Up and Running
 
-This will start all service, then access the UI on <http://localhost:8080>
+This will start all services, then access the UI on <http://localhost:8080>
 
 ```bash
 docker-compose up -d

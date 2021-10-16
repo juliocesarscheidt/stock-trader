@@ -1,4 +1,5 @@
 import axios from 'axios'
+// const apiUri = process.env.VUE_APP_API_URI
 
 const getLastStockByName = async (name) => {
   return axios

@@ -5,7 +5,7 @@ This is a project used to retrieve stocks information, from a third party websit
 It is split into small services, each one with some purpose.
 
 ## Architecture
-![Architecture](./architecture/stocks-project.drawio.png)
+![Architecture](./images/stocks-project.drawio.png)
 
 ## Up and Running
 

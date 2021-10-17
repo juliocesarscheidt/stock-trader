@@ -28,7 +28,7 @@ resource "aws_alb_target_group" "stock-ui-tg" {
     healthy_threshold   = 2
     unhealthy_threshold = 10
     timeout             = 30
-    interval            = 30
+    interval            = 60
     matcher             = "200-299"
     path                = "/"
     protocol            = "HTTP"
@@ -51,7 +51,7 @@ resource "aws_alb_target_group" "stock-api-tg" {
     healthy_threshold   = 2
     unhealthy_threshold = 10
     timeout             = 30
-    interval            = 30
+    interval            = 60
     matcher             = "200-299"
     path                = "/api/v1/health"
     protocol            = "HTTP"

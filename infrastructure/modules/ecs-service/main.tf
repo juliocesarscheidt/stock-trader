@@ -3,6 +3,12 @@ resource "aws_cloudwatch_log_group" "task-log-group" {
   name              = "/aws/ecs/${var.app_config.name}"
 }
 
+resource "null_resource" "dependency_getter" {
+  provisioner "local-exec" {
+    command = "echo ${length(var.dependencies)}"
+  }
+}
+
 resource "aws_ecs_task_definition" "task-definition" {
   family = "${var.app_config.name}-task-definition"
   # role for task execution, which will be used to pull the image, create log stream, start the task, etc
@@ -37,7 +43,7 @@ resource "aws_ecs_task_definition" "task-definition" {
   memory                   = tonumber(var.app_config.memory)
   requires_compatibilities = ["FARGATE"]
   # tags = var.tags
-  depends_on = var.depends_on_var
+  depends_on = [null_resource.dependency_getter]
 }
 
 resource "aws_ecs_service" "service" {
@@ -54,5 +60,5 @@ resource "aws_ecs_service" "service" {
     security_groups  = var.security_group_ids
     assign_public_ip = true
   }
-  depends_on = var.depends_on_var
+  depends_on = [null_resource.dependency_getter]
 }

@@ -25,10 +25,11 @@ resource "aws_alb_target_group" "stock-ui-tg" {
   deregistration_delay          = 60
   target_type                   = "ip"
   health_check {
-    healthy_threshold   = 3
-    unhealthy_threshold = 5
-    timeout             = 10
+    healthy_threshold   = 2
+    unhealthy_threshold = 10
+    timeout             = 30
     interval            = 30
+    matcher             = "200-299"
     path                = "/"
     protocol            = "HTTP"
     port                = var.app_config_stock_ui_container_port
@@ -47,10 +48,11 @@ resource "aws_alb_target_group" "stock-api-tg" {
   deregistration_delay          = 60
   target_type                   = "ip"
   health_check {
-    healthy_threshold   = 3
-    unhealthy_threshold = 5
-    timeout             = 10
+    healthy_threshold   = 2
+    unhealthy_threshold = 10
+    timeout             = 30
     interval            = 30
+    matcher             = "200-299"
     path                = "/api/v1/health"
     protocol            = "HTTP"
     port                = var.app_config_stock_api_container_port

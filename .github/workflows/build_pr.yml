@@ -1,0 +1,76 @@
+name: build_pr
+
+on:
+  pull_request:
+    branches: [ main, development ]
+
+jobs:
+  build:
+    name: Build PR
+    runs-on: ubuntu-latest
+    steps:
+    - name: Check out
+      uses: actions/checkout@v2
+    - name: Build Docker image stock-crawler
+      uses: docker/build-push-action@v1
+      with:
+        path: ./stock-crawler
+        username: ${{ secrets.DOCKER_USERNAME }}
+        password: ${{ secrets.DOCKER_PASSWORD }}
+        repository: juliocesarmidia/stock-crawler
+        tag_with_ref: false
+        tag_with_sha: true
+    - name: Build Docker image stock-api
+      uses: docker/build-push-action@v1
+      with:
+        path: ./stock-api
+        username: ${{ secrets.DOCKER_USERNAME }}
+        password: ${{ secrets.DOCKER_PASSWORD }}
+        repository: juliocesarmidia/stock-api
+        tag_with_ref: false
+        tag_with_sha: true
+    - name: Build Docker image stock-ui
+      uses: docker/build-push-action@v1
+      with:
+        path: ./stock-ui
+        username: ${{ secrets.DOCKER_USERNAME }}
+        password: ${{ secrets.DOCKER_PASSWORD }}
+        repository: juliocesarmidia/stock-ui
+        tag_with_ref: false
+        tag_with_sha: true
+
+  notify:
+    name: Notify
+    runs-on: ubuntu-latest
+    if: always()
+    needs: build
+    env:
+      BOT_GITHUB_TOKEN: ${{ secrets.BOT_GITHUB_TOKEN }}
+      PULL_REQUEST_NUMBER: ${{ github.event.number }}
+      OWNER: juliocesarscheidt
+      REPOSITORY: stock-trader
+    steps:
+    - name: The job has failed
+      if: ${{ failure() }}
+      run: |
+        docker container run -i --rm \
+          --env GITHUB_TOKEN=$BOT_GITHUB_TOKEN \
+          --env GITHUB_OWNER=$OWNER \
+          --env GITHUB_REPO=$REPOSITORY \
+          --env GITHUB_COMMENT_TYPE=pr \
+          --env GITHUB_PR_ISSUE_NUMBER=$PULL_REQUEST_NUMBER \
+          --env GITHUB_COMMENT_FORMAT="<b>Comment</b><br/>{{.}}" \
+          --env GITHUB_COMMENT="The build of commit $GITHUB_SHA has failed" \
+          cloudposse/github-commenter:latest
+    - name: The job has succeeded
+      if: ${{ success() }}
+      run: |
+        docker container run -i --rm \
+          --env GITHUB_TOKEN=$BOT_GITHUB_TOKEN \
+          --env GITHUB_OWNER=$OWNER \
+          --env GITHUB_REPO=$REPOSITORY \
+          --env GITHUB_COMMENT_TYPE=pr \
+          --env GITHUB_PR_ISSUE_NUMBER=$PULL_REQUEST_NUMBER \
+          --env GITHUB_COMMENT_FORMAT="<b>Comment</b><br/>{{.}}" \
+          --env GITHUB_COMMENT="The build of commit $GITHUB_SHA was successful, LGTM" \
+          cloudposse/github-commenter:latest

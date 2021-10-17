@@ -49,9 +49,10 @@ variable "app_config_container_environment" {
   description = "Config for app container environment"
 }
 
-variable "depends_on_var" {
-  type        = any
-  description = "Depends on variable"
+variable dependencies {
+  type    = any
+  default = []
+  description = "Dependencies"
 }
 
 variable "tags" {

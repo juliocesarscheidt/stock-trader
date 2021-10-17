@@ -1,3 +1,4 @@
+# this is a sample file
 aws_region        = "sa-east-1"
 root_domain       = "domain.com.br"
 docker_registry   = "000000000000.dkr.ecr.sa-east-1.amazonaws.com"
@@ -38,7 +39,7 @@ app_config_stock_api = {
 }
 app_config_stock_api_container_port = 5050
 app_config_stock_api_container_environment = [
-  { "name" : "MONGO_URI", "value" : "" },
+  { "name" : "MONGO_URI", "value" : "" }, # this variable should be filled in
   { "name" : "RABBITMQ_EXCHANGE", "value" : "stocks_queue_exchange" },
   { "name" : "RABBITMQ_ROUTING_KEY", "value" : "stocks_queue" },
   { "name" : "FLASK_ENV", "value" : "production" },
@@ -58,7 +59,7 @@ app_config_stock_crawler = {
 }
 app_config_stock_crawler_container_port = null
 app_config_stock_crawler_container_environment = [
-  { "name" : "MONGO_URI", "value" : "" },
+  { "name" : "MONGO_URI", "value" : "" }, # this variable should be filled in
   { "name" : "RABBITMQ_QUEUE", "value" : "stocks_queue" },
 ]
 tags = {

@@ -10,9 +10,7 @@ resource "aws_mq_broker" "rabbitmq" {
     username = var.rabbitmq_username
     password = var.rabbitmq_password
   }
-  depends_on = [
-    aws_subnet.public_subnet
-  ]
+  depends_on = [aws_subnet.public_subnet]
 }
 
 provider "rabbitmq" {

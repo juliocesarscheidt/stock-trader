@@ -1,14 +1,5 @@
 # Terraform Commands
 
-## EC2 IP info
-
-```bash
-PUBLIC_IP=$(curl http://169.254.169.254/latest/meta-data/public-ipv4)
-PRIVATE_IP=$(curl http://169.254.169.254/latest/meta-data/local-ipv4)
-```
-
-## Commands
-
 ```bash
 terraform fmt -write=true -recursive
 

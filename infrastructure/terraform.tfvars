@@ -6,7 +6,7 @@ certificate_arn   = "arn:aws:acm:sa-east-1:000000000000:certificate/00000000-000
 image_version     = "0.0.1"
 rabbitmq_username = "rabbitmq"
 rabbitmq_password = ""
-# 000000000000.dkr.ecr.sa-east-1.amazonaws.com/stock-ui:0.0.1
+# e.g. 000000000000.dkr.ecr.sa-east-1.amazonaws.com/stock-ui:0.0.1
 app_config_stock_ui = {
   "name"                    = "stock-ui"
   "container_name"          = "stock-ui"
@@ -23,7 +23,7 @@ app_config_stock_ui_container_port = 80
 app_config_stock_ui_container_environment = [
   { "name" : "NODE_ENV", "value" : "production" },
 ]
-# 000000000000.dkr.ecr.sa-east-1.amazonaws.com/stock-api:0.0.1
+# e.g. 000000000000.dkr.ecr.sa-east-1.amazonaws.com/stock-api:0.0.1
 app_config_stock_api = {
   "name"                    = "stock-api"
   "container_name"          = "stock-api"
@@ -43,7 +43,7 @@ app_config_stock_api_container_environment = [
   { "name" : "RABBITMQ_ROUTING_KEY", "value" : "stocks_queue" },
   { "name" : "FLASK_ENV", "value" : "production" },
 ]
-# 000000000000.dkr.ecr.sa-east-1.amazonaws.com/stock-crawler:0.0.1
+# e.g. 000000000000.dkr.ecr.sa-east-1.amazonaws.com/stock-crawler:0.0.1
 app_config_stock_crawler = {
   "name"                    = "stock-crawler"
   "container_name"          = "stock-crawler"

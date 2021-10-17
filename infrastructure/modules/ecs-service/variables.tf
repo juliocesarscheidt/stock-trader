@@ -19,11 +19,6 @@ variable "image_version" {
   description = "Image version"
 }
 
-variable "service_discovery_arn" {
-  type        = string
-  description = "Service discovery ARN"
-}
-
 variable "subnet_ids" {
   type        = list(string)
   description = "Subnet IDs"
@@ -47,6 +42,12 @@ variable "app_config_container_port" {
 variable "app_config_container_environment" {
   type        = list(any)
   description = "Config for app container environment"
+}
+
+variable dependencies {
+  type    = any
+  default = []
+  description = "Dependencies"
 }
 
 variable "tags" {

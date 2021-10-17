@@ -34,6 +34,13 @@ db.history.find({});
 db.history.find({"_id": ObjectId("615e73041061f9ca09c75f6e")}).pretty();
 
 
+db.history.createIndex({ name: -1 })
+
+db.history.getIndexes()
+
+db.history.dropIndex({ name: -1 })
+
+
 # find a history by name and order by date desc
 db.history.find({ name : "itub4" }).sort({ date: -1 }).pretty().skip(0).limit(1);
 

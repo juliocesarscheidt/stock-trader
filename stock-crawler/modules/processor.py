@@ -40,7 +40,11 @@ def process(__http_client, __history_collection):
           'date': get_datetime_now_iso()
         }
         log(stock_history)
-        __history_collection.insert_one(stock_history)
+        try:
+          __history_collection.insert_one(stock_history)
+        except Exception as e:
+          log(e)
+          continue
 
     # sleep 60 secs
     time.sleep(60)

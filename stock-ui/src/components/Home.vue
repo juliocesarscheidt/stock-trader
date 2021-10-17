@@ -97,7 +97,7 @@ export default {
             group: 'notification',
             type: 'error',
             title: 'Error',
-            text: 'The stock was NOT found!'
+            text: 'The stock was not found!'
           });
           this.clearTimer()
           this.searchingStock = false

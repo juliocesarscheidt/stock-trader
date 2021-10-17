@@ -19,4 +19,9 @@ resource "aws_route53_record" "alb_record" {
   depends_on = [
     data.aws_route53_zone.root_zone,
   ]
+  lifecycle {
+    ignore_changes = [
+      zone_id,
+    ]
+  }
 }

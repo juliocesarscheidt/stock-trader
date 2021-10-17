@@ -28,7 +28,7 @@ For the MongoDB we are going to use Cloud MongoDB <https://cloud.mongodb.com/>, 
 
 > The RabbitMQ will be the AWS MQ with interface for RabbitMQ.
 
-# Cloud architecture
+## Cloud architecture
 
 ![Architecture](./images/stocks-project-cloud.drawio.png)
 

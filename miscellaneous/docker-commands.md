@@ -1,4 +1,4 @@
-# Commands
+# Docker Commands
 
 ```bash
 
@@ -21,15 +21,15 @@ docker-compose up -d --build stock-api
 docker-compose logs -f --tail 50 stock-api
 
 # try out API
-curl --silent -X GET 'http://localhost:5050/v1/stocks/last'
+curl --silent -X GET 'http://localhost:5050/api/v1/stocks/last'
 
 STOCKS=('itub4' 'itsa4' 'bbdc3' 'cash3' 'bbas3' 'lwsa3' 'lame4' 'ciel3' 'embr3')
 for STOCK in "${STOCKS[@]}"; do
-  curl --silent -X GET "http://localhost:5050/v1/stocks/last/${STOCK}"
+  curl --silent -X GET "http://localhost:5050/api/v1/stocks/last/${STOCK}"
 done
 
-curl --silent -X GET 'http://localhost:5050/v1/stocks/last/itub4'
-curl --silent -X GET 'http://localhost:5050/v1/stocks/last/itsa4'
+curl --silent -X GET 'http://localhost:5050/api/v1/stocks/last/itub4'
+curl --silent -X GET 'http://localhost:5050/api/v1/stocks/last/itsa4'
 
 # ui
 docker-compose up -d --build stock-ui

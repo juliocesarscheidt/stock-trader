@@ -1,0 +1,6 @@
+.terraform
+*.tfstate*
+development.tfvars
+production.tfvars
+run.sh
+tfplan

@@ -1,4 +1,6 @@
 pymongo
+pymongo[srv]
+dnspython
 pika
 urllib3
 bs4

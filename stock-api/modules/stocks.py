@@ -70,7 +70,7 @@ class LastStocks(Stock):
     data = self.get_last_stocks()
     log(data)
 
-    response = jsonify(status="OK", data=data)
+    response = jsonify(status='OK', data=data)
     return make_response(response, 200)
 
 class LastStockByName(Stock):
@@ -78,5 +78,5 @@ class LastStockByName(Stock):
     data = self.get_last_stock_by_name(name)
     log(data)
 
-    response = jsonify(status="OK", data=data)
+    response = jsonify(status='OK', data=data)
     return make_response(response, 200)

@@ -4,5 +4,5 @@ resource "aws_nat_gateway" "nat_gw" {
   tags = {
     Name = "nat_gw"
   }
-  depends_on = [aws_subnet.public_subnet, aws_eip.nat_eip]
+  depends_on = [aws_eip.nat_eip, aws_subnet.public_subnet]
 }

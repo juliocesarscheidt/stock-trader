@@ -1,5 +1,6 @@
 #!make
 
+ENV?=production
 TERRAFORM_PATH?="./infrastructure"
 DOCKER_REGISTRY?=
 IMAGE_VERSION?=0.0.1

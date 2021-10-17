@@ -24,7 +24,12 @@ export default {
     Stock
   },
   computed: {
-    ...mapGetters(['stocks']),
+    ...mapGetters({
+      stocks: 'stocks'
+    })
+  },
+  created() {
+    this.$store.dispatch('initStocks')
   }
 }
 </script>

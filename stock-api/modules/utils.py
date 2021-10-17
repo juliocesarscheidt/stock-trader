@@ -1,6 +1,6 @@
+import os
 import pika
 
-from pymongo import MongoClient
 from datetime import datetime
 
 def get_datetime_now_iso() -> str:
@@ -15,6 +15,3 @@ def get_rabbitmq_channel(rabbitmq_uri):
   params = pika.URLParameters(rabbitmq_uri)
   connection = pika.BlockingConnection(params)
   return connection.channel()
-
-def get_mongo_client(mongo_uri):
-  return MongoClient(mongo_uri)

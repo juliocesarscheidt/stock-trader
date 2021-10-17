@@ -1,8 +1,9 @@
 #!make
 
+ENV?=production
 PLAN_FILE?="tfplan"
-DOCKER_REGISTRY?=
 CLUSTER_NAME?="ecs-cluster"
+DOCKER_REGISTRY?=
 IMAGE_VERSION?=0.0.1
 RABBITMQ_USERNAME?=rabbitmq
 RABBITMQ_PASSWORD?=

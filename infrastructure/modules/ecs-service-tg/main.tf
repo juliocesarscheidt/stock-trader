@@ -37,10 +37,7 @@ resource "aws_ecs_task_definition" "task-definition" {
   memory                   = tonumber(var.app_config.memory)
   requires_compatibilities = ["FARGATE"]
   # tags = var.tags
-  depends_on = [
-    aws_cloudwatch_log_group.task-log-group,
-    var.app_config_container_environment,
-  ]
+  depends_on = var.depends_on_var
 }
 
 resource "aws_ecs_service" "service" {
@@ -62,16 +59,5 @@ resource "aws_ecs_service" "service" {
     container_name   = var.app_config.container_name
     container_port   = var.app_config_container_port
   }
-  service_registries {
-    registry_arn   = var.service_discovery_arn
-    container_name = var.app_config.container_name
-  }
-  depends_on = [
-    var.cluster_name,
-    var.subnet_ids,
-    var.security_group_ids,
-    var.target_group_id,
-    var.service_discovery_arn,
-    aws_ecs_task_definition.task-definition,
-  ]
+  depends_on = var.depends_on_var
 }

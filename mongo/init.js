@@ -8,3 +8,5 @@ db.history.insertMany([
     date: new Date().toISOString()
   }
 ]);
+
+db.history.createIndex({ name: -1 })

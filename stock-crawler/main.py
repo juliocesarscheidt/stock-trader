@@ -8,8 +8,8 @@ from pymongo import MongoClient
 from urllib.parse import urljoin, unquote_plus
 from threading import Thread
 
-from modules.crawler import crawl_stock_price
-from modules.utils import get_http_client, get_mongo_client
+from modules.mongo import MongoConnection
+from modules.utils import get_http_client
 from modules.logger import log
 from modules.consumer import consume
 from modules.processor import process
@@ -27,18 +27,22 @@ if __name__ in '__main__':
 
   http_client = get_http_client()
 
-  mongo_client = get_mongo_client(MONGO_URI)
-  stocks_database = mongo_client['stocks']
-  history_collection = stocks_database['history']
+  mongoConnection = MongoConnection(MONGO_URI)
+  log(mongoConnection.history_collection)
+  try:
+    if mongoConnection.history_collection is None:
+      mongoConnection.connect_mongo_and_get_collection()
+  except Exception as e:
+    log(e)
 
   threads = []
 
-  # first thread, to fetch existing stocks and crawl them again
-  t1 = Thread(target=fetch_and_crawl, args=[http_client, history_collection])
+  # first thread, to fetch existing stocks and crawl them again, it uses mongodb connetion
+  t1 = Thread(target=fetch_and_crawl, args=[http_client, mongoConnection.history_collection])
   threads.append(t1)
 
-  # second thread, to consume from queue new stocks to crawl
-  t2 = Thread(target=consume_and_crawl, args=[http_client, history_collection])
+  # second thread, to consume from queue new stocks to crawl, it uses mongodb and rabbitmq connetion
+  t2 = Thread(target=consume_and_crawl, args=[http_client, mongoConnection.history_collection])
   threads.append(t2)
 
   for t in threads:

@@ -10,7 +10,7 @@ def get_datetime_now_iso() -> str:
   return datetime_now
 
 def convert_value_to_float(value: str) -> float:
-  return float(value.replace(',', '.'))
+  return float(str(value).replace(',', '.'))
 
 def get_http_client():
   urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)

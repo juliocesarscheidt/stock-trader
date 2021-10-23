@@ -7,7 +7,7 @@ from flask import Flask
 from flask_restful import Api
 from flask_cors import CORS
 
-from modules.stocks import LastStocks, LastStockByName
+from modules.stocks import LastStocks, LastStocksByCountry, LastStockByName, LastStockByCountryAndName
 from modules.health import Health
 from modules.utils import convert_value_to_float, get_datetime_now_iso
 from modules.logger import log
@@ -23,5 +23,7 @@ if __name__ in '__main__':
   api.add_resource(Health, '/api/v1/health')
   api.add_resource(LastStocks, '/api/v1/stocks/last')
   api.add_resource(LastStockByName, '/api/v1/stocks/last/<string:name>')
+  api.add_resource(LastStocksByCountry, '/api/v1/stocks/<string:country>/last')
+  api.add_resource(LastStockByCountryAndName, '/api/v1/stocks/<string:country>/last/<string:name>')
   # start API
   app.run(host='0.0.0.0', port='5050', debug=True)

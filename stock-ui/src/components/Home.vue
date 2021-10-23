@@ -34,11 +34,11 @@
 
 <script>
 import { mapGetters } from 'vuex'
-import { getLastStockByName, getLastStocks } from '../services/stocks'
+import { getLastStockByCountryAndName, getLastStocksByCountry } from '../services/stocks'
 
 export default {
   computed: {
-    ...mapGetters(['balance']),
+    ...mapGetters(['balance', 'country']),
     disableButton() {
       return !this.stockName || this.searchingStock;
     },
@@ -70,11 +70,11 @@ export default {
       }
       this.searchingStock = true
 
-      const stock = await getLastStockByName(this.stockName)
+      const stock = await getLastStockByCountryAndName(this.country, this.stockName)
       if (stock) {
-        const stocks = await getLastStocks()
+        const stocks = await getLastStocksByCountry(this.country)
 
-        const existingStock = stocks.find(s => s.id === stock.id)
+        const existingStock = stocks.find(s => s.name === stock.name)
         if (existingStock) {
           stocks.splice(stocks.indexOf(existingStock), 1, stock)
         } else {

@@ -1,4 +1,8 @@
-const INITIAL_BALANCE = 1000
+const INITIAL_BALANCE = 10000
+const INITIAL_STOCKS = {
+  'br': [],
+  'us': [],
+};
 
 const setBalanceOnStorage = (balance) => {
   sessionStorage.setItem('balance', balance)
@@ -15,51 +19,52 @@ const setStocksPortfolioOnStorage = (stocksPortfolio) => {
 
 const getStocksPortfolioFromStorage = () => {
   const storedStocksPortfolio = sessionStorage.getItem('stocksPortfolio')
-  return storedStocksPortfolio ? JSON.parse(storedStocksPortfolio) : []
+  return storedStocksPortfolio ? JSON.parse(storedStocksPortfolio) : INITIAL_STOCKS
 }
 
 export default  {
   state: {
     balance: getBalanceFromStorage(),
-    stocks: getStocksPortfolioFromStorage()
+    stocksPortfolio: getStocksPortfolioFromStorage()
   },
   mutations: {
-    buyStock(state, { stockId, stockPrice, amount }) {
+    buyStock(state, { stockId, stockName, stockPrice, amount }) {
       const price = parseFloat(stockPrice * amount)
-      // cannot buy more stocks than those we can afford
+      // cannot buy more stocksPortfolio than those we can afford
       if (price > state.balance) return
-      const record = state.stocks.find(({ id }) => id === stockId)
+      const record = state.stocksPortfolio[this.getters.country].find(s => s.name === stockName)
       if (record) {
         // increase amount
         const newAmount = (record.amount + amount)
         Reflect.set(record, 'amount', newAmount)
       } else {
-        state.stocks.push({
+        state.stocksPortfolio[this.getters.country].push({
           id: stockId,
+          name: stockName,
           amount: amount
         })
       }
-      // persist new stocks portfolio
-      setStocksPortfolioOnStorage(this.getters.stocksPortfolio)
+      // persist new stocksPortfolio portfolio
+      setStocksPortfolioOnStorage(state.stocksPortfolio)
       // decrease balance
       state.balance -= price
       setBalanceOnStorage(state.balance)
     },
-    sellStock(state, { stockId, stockPrice, amount }) {
+    sellStock(state, { stockId, stockName, stockPrice, amount }) {
       const price = parseFloat(stockPrice * amount)
-      const record = state.stocks.find(({ id }) => id === stockId)
+      const record = state.stocksPortfolio[this.getters.country].find(s => s.name === stockName)
       if (!record) return
-      // cannot sell more stocks than the amount we have
+      // cannot sell more stocksPortfolio than the amount we have
       if (amount > record.amount) return
       if (record.amount > amount) {
         // decrease amount
         const newAmount = (record.amount - amount)
         Reflect.set(record, 'amount', newAmount)
       } else {
-        state.stocks.splice(state.stocks.indexOf(record), 1)
+        state.stocksPortfolio[this.getters.country].splice(state.stocksPortfolio[this.getters.country].indexOf(record), 1)
       }
-      // persist new stocks portfolio
-      setStocksPortfolioOnStorage(this.getters.stocksPortfolio)
+      // persist new stocksPortfolio portfolio
+      setStocksPortfolioOnStorage(state.stocksPortfolio)
       // increase balance
       state.balance += price
       setBalanceOnStorage(state.balance)
@@ -72,18 +77,29 @@ export default  {
   },
   getters: {
     stocksPortfolio(state, getters) {
-      const stocks = state.stocks.map(stock => {
-        // accessing the "stocks" getter from stocks module to recover all stocks
-        const record = getters.stocks.find(({ id }) => id === stock.id)
-        if (record) {
-          return {
-            id: stock.id,
-            amount: stock.amount,
-            name: record.name,
-            price: record.price,
+      if (!state.stocksPortfolio
+        || !state.stocksPortfolio[getters.country]
+        || !state.stocksPortfolio[getters.country].length) {
+        return [];
+      }
+      const allStocks = getters.stocks
+      const stocks = state.stocksPortfolio[getters.country]
+        .map(stock => {
+          // accessing the "stocks" getter from stocks module to recover all stocks
+          if (stock && stock.name) {
+            const record = allStocks.find(s => s.name === stock.name)
+            if (record) {
+              return {
+                id: record.id,
+                amount: stock.amount,
+                name: record.name,
+                country: record.country,
+                price: record.price,
+              }
+            }
           }
-        }
-      })
+        })
+        .filter(s => s && s.id !== undefined && s.id !== null)
       return stocks
     },
     balance(state) {

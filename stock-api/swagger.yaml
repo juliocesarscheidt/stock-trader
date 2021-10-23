@@ -50,14 +50,65 @@ paths:
     get:
       tags:
         - Stocks
-      summary: Get last stock by name
+      summary: Get last stock by Name
       operationId: getLastStockByName
       produces:
         - application/json
       parameters:
         - name: name
           in: path
-          description: name
+          description: Name
+          required: true
+          type: string
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/Stock'
+        '500':
+          description: Internal Server Error
+
+  /api/v1/stocks/{country}/last:
+    get:
+      tags:
+        - Stocks
+      summary: Get last stocks by Country
+      operationId: getLastStocksByCountry
+      produces:
+        - application/json
+      parameters:
+        - name: country
+          in: path
+          description: Country
+          required: true
+          type: string
+      responses:
+        '200':
+          description: OK
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Stock'
+        '500':
+          description: Internal Server Error
+
+  /api/v1/stocks/{country}/last/{name}:
+    get:
+      tags:
+        - Stocks
+      summary: Get last stock by Country and Name
+      operationId: getLastStockByCountryAndName
+      produces:
+        - application/json
+      parameters:
+        - name: country
+          in: path
+          description: Country
+          required: true
+          type: string
+        - name: name
+          in: path
+          description: Name
           required: true
           type: string
       responses:
@@ -81,6 +132,9 @@ definitions:
       name:
         type: string
         example: 'itub4'
+      country:
+        type: string
+        example: 'brazil'
       price:
         type: number
         example: 0.00

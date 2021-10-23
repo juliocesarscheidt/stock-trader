@@ -68,6 +68,34 @@ db.history.aggregate(
   ]
 )
 
+db.history.aggregate(
+  [
+    {
+      $match: { country: "br" }
+    }, {
+      $sort: { date: -1 }
+    }, {
+      $group: {
+        _id: ["$name", "$country"],
+        object_id: { $first: "$_id" },
+        name: { $first: "$name" },
+        country: { $first: "$country" },
+        price: { $first: "$price" },
+        date: { $first: "$date" }
+      }
+    }, {
+      $project: {
+        _id: "$object_id",
+        name: 1,
+        country: 1,
+        price: 1,
+        date: 1
+      }
+    }
+  ]
+)
+
+
 # find all stocks and group by name
 db.history.aggregate(
   [
@@ -80,6 +108,24 @@ db.history.aggregate(
       $project: {
         _id: 0,
         name: 1
+      }
+    }
+  ]
+)
+
+db.history.aggregate(
+  [
+    {
+      $group: {
+        _id: ["$name", "$country"],
+        name: { $first: "$name" },
+        country: { $first: "$country" }
+      }
+    }, {
+      $project: {
+        _id: 0,
+        name: 1,
+        country: 1
       }
     }
   ]

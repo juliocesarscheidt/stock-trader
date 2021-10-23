@@ -11,6 +11,36 @@
     </v-toolbar-items>
     <v-spacer></v-spacer>
     <v-toolbar-items>
+      <v-select
+        :items="countries"
+        :value="country"
+        @input="setCountry"
+        label="Country"
+        filled
+        item-text="name"
+        item-value="abbreviation"
+        class="mx-4"
+        style="max-width: 100px; white-space: nowrap;"
+      >
+      </v-select>
+      <!-- <v-select
+        v-model="country"
+        :items="countries"
+        filled
+        item-text="name"
+        item-value="abbreviation"
+        style="max-width: 100px; white-space: nowrap;"
+      >
+      </v-select>
+      <select
+        v-model="country"
+        label="Country"
+        style="max-width: 100px; width: 100px; height: 60%; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; border-bottom: #222 1px solid; outline: none; cursor: pointer;"
+      >
+        <option v-for="c in countries" :value="c.abbreviation" :key="c.abbreviation">
+          {{ c.name}}
+        </option>
+      </select> -->
       <v-btn flat @click="finishDay">Finish Day</v-btn>
       <!-- <v-menu offset-y>
         <v-btn flat slot="activator">Save & Load</v-btn>
@@ -37,12 +67,28 @@ import { mapGetters, mapActions } from 'vuex'
 
 export default {
   computed: {
-    ...mapGetters(['balance'])
+    ...mapGetters(['balance', 'country'])
+  },
+  data() {
+    return {
+      countries: [
+        {
+          name: 'Brazil',
+          abbreviation: 'br'
+        }, {
+          name: 'United States',
+          abbreviation: 'us'
+        },
+      ]
+    }
   },
   methods: {
     ...mapActions(['randomizeStocks']),
     finishDay() {
       this.randomizeStocks()
+    },
+    setCountry(country) {
+      this.$store.dispatch('setCountry', country)
     }
   }
 }

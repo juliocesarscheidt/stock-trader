@@ -4,12 +4,11 @@ import pika
 import time
 
 from .crawler import crawl_stock_price
-from .utils import convert_value_to_float, get_datetime_now_iso, get_rabbitmq_channel
+from .utils import get_datetime_now_iso, get_rabbitmq_channel
 from .logger import log
 
 RABBITMQ_URI = os.environ.get('RABBITMQ_URI')
 RABBITMQ_QUEUE = os.environ.get('RABBITMQ_QUEUE')
-
 RETRY_SECONDS = int(os.environ.get('RETRY_SECONDS', '30'))
 
 def generate_callback(http_client, history_collection):
@@ -18,20 +17,25 @@ def generate_callback(http_client, history_collection):
     log(message)
 
     stock_name = message['name']
+    stock_country = message['country']
 
-    stock_price = crawl_stock_price(http_client, stock_name)
-    if stock_price is not None:
+    stock_price = crawl_stock_price(http_client, stock_country, stock_name)
+    log('stock_price ' + str(stock_price))
+
+    if stock_price is None:
+      log('[INFO] No stock price found for ' + stock_name)
+      __channel.basic_ack(delivery_tag=__method.delivery_tag)
+    else:
       stock_history = {
         'name': stock_name,
-        'price': convert_value_to_float(stock_price),
+        'country': stock_country,
+        'price': stock_price,
         'date': get_datetime_now_iso()
       }
       log(stock_history)
-      
       try:
         history_collection.insert_one(stock_history)
         __channel.basic_ack(delivery_tag=__method.delivery_tag)
-        
       except Exception as e:
         log(e)
         # requeue message

@@ -3,40 +3,29 @@ import json
 import time
 
 from .crawler import crawl_stock_price
-from .utils import convert_value_to_float, get_datetime_now_iso
+from .utils import get_datetime_now_iso
+from .stocks import get_stocks
 from .logger import log
 
-def get_stocks_names(__history_collection):
-  data = []
-  pipeline = [
-    {
-      '$group': {
-        '_id': "$name",
-        'name': { '$first': "$name" }
-      }
-    }, {
-      '$project': {
-        '_id': 0,
-        'name': 1
-      }
-    }
-  ]
-  histories = __history_collection.aggregate(pipeline)
-  for history in histories:
-    data.append(history.get('name'))
-  return data
+PROCESS_INTERVAL_SECONDS = int(os.environ.get('PROCESS_INTERVAL_SECONDS', '60'))
 
 def process(__http_client, __history_collection):
   while True:
-    stocks = get_stocks_names(__history_collection)
+    stocks = get_stocks(__history_collection)
     log(stocks)
 
     for stock in stocks:
-      stock_price = crawl_stock_price(__http_client, stock)
+      stock_name = stock['name']
+      stock_country = stock['country']
+
+      stock_price = crawl_stock_price(__http_client, stock_country, stock_name)
+      log('stock_price ' + str(stock_price))
+
       if stock_price is not None:
         stock_history = {
-          'name': stock,
-          'price': convert_value_to_float(stock_price),
+          'name': stock_name,
+          'country': stock_country,
+          'price': stock_price,
           'date': get_datetime_now_iso()
         }
         log(stock_history)
@@ -47,4 +36,4 @@ def process(__http_client, __history_collection):
           continue
 
     # sleep 60 secs
-    time.sleep(60)
+    time.sleep(PROCESS_INTERVAL_SECONDS)

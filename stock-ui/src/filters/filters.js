@@ -1,4 +1,4 @@
-const currency = value => `R$ ${value.toLocaleString()}`
+const currency = value => `US$ ${value.toLocaleString()}`
 
 export {
   currency

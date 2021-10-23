@@ -1,8 +1,8 @@
 <template>
   <v-layout row wrap>
-    <template v-if="stocks.length > 0">
+    <template v-if="stocksPortfolio.length > 0">
       <Stock
-        v-for="stock in stocks"
+        v-for="stock in stocksPortfolio"
         :key="stock.id"
         :stock="stock"
       />
@@ -24,9 +24,7 @@ export default {
     Stock
   },
   computed: {
-    ...mapGetters({
-      stocks: 'stocksPortfolio'
-    })
+    ...mapGetters(['stocksPortfolio'])
   }
 }
 </script>

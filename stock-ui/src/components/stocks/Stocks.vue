@@ -24,9 +24,7 @@ export default {
     Stock
   },
   computed: {
-    ...mapGetters({
-      stocks: 'stocks'
-    })
+    ...mapGetters(['stocks'])
   },
   created() {
     this.$store.dispatch('initStocks')

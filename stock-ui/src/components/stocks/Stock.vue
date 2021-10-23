@@ -69,6 +69,7 @@ export default {
       }
       const order = {
         stockId: this.stock.id,
+        stockName: this.stock.name,
         stockPrice: this.stock.price,
         amount: this.amount
       }

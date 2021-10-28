@@ -43,6 +43,7 @@ app_config_stock_api_container_environment = [
   { "name" : "RABBITMQ_EXCHANGE", "value" : "stocks_queue_exchange" },
   { "name" : "RABBITMQ_ROUTING_KEY", "value" : "stocks_queue" },
   { "name" : "FLASK_ENV", "value" : "production" },
+  { "name" : "AWS_XRAY_DAEMON_ADDRESS", "value" : "127.0.0.1:2000" },
 ]
 # e.g. 000000000000.dkr.ecr.sa-east-1.amazonaws.com/stock-crawler:0.0.1
 app_config_stock_crawler = {

@@ -11,8 +11,7 @@ resource "aws_ecs_cluster" "ecs-cluster" {
 }
 
 module "stock-ui" {
-  source = "./modules/ecs-service-tg"
-
+  source                           = "./modules/ecs-service-tg"
   aws_region                       = var.aws_region
   docker_registry                  = var.docker_registry
   cluster_name                     = var.cluster_name
@@ -35,8 +34,7 @@ module "stock-ui" {
 }
 
 module "stock-api" {
-  source = "./modules/ecs-service-tg"
-
+  source                    = "./modules/ecs-service-tg-xray"
   aws_region                = var.aws_region
   docker_registry           = var.docker_registry
   cluster_name              = var.cluster_name
@@ -61,8 +59,7 @@ module "stock-api" {
 }
 
 module "stock-crawler" {
-  source = "./modules/ecs-service"
-
+  source                    = "./modules/ecs-service"
   aws_region                = var.aws_region
   docker_registry           = var.docker_registry
   cluster_name              = var.cluster_name

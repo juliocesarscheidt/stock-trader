@@ -81,7 +81,7 @@ apply: plan
 	terraform apply $(PLAN_FILE)
 	terraform output -json
 
-destroy: plan
+destroy:
 	-@echo "Destroy"
 	terraform destroy \
 		-var-file=$(ENV).tfvars \

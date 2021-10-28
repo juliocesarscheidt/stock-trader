@@ -1,5 +1,6 @@
 import os
 import pika
+import json
 import urllib3
 
 from datetime import datetime
@@ -20,3 +21,12 @@ def get_rabbitmq_channel(rabbitmq_uri):
   params = pika.URLParameters(rabbitmq_uri)
   connection = pika.BlockingConnection(params)
   return connection.channel()
+
+def get_dolar_price(http_client) -> float:
+  code = 'USD-BRL'
+  api_uri = 'https://economia.awesomeapi.com.br/all'
+  response = http_client.request('GET', f'{api_uri}/{code}')
+  if not (response.status >= 200 and response.status < 300):
+    return None
+  data = json.loads(response.data)
+  return convert_value_to_float(data['USD']['ask'])

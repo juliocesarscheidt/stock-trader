@@ -45,8 +45,8 @@ variable "app_config_container_environment" {
 }
 
 variable dependencies {
-  type    = any
-  default = []
+  type        = any
+  default     = []
   description = "Dependencies"
 }
 

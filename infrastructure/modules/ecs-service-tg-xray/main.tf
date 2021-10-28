@@ -14,7 +14,7 @@ resource "aws_ecs_task_definition" "task-definition" {
   # role for task execution, which will be used to pull the image, create log stream, start the task, etc
   execution_role_arn = var.app_config.execution_role_arn
   # role for task application, to be used by the application itself in execution time, it's optional
-  task_role_arn = var.app_config.task_role_arn
+  task_role_arn = var.app_config.task_role_arn == "" ? aws_iam_role.ecs-task-role.arn : var.app_config.task_role_arn
   container_definitions = jsonencode([
     {
       name : var.app_config.container_name
@@ -36,11 +36,26 @@ resource "aws_ecs_task_definition" "task-definition" {
           "awslogs-stream-prefix" = "ecs",
         }
       },
+      # because of awsvpc mode, we could not use links here
+      # links : [
+      #   "xray-daemon"
+      # ],
+      }, {
+      name : "xray-daemon",
+      image : "amazon/aws-xray-daemon:3.x",
+      portMappings = [{
+        containerPort = 2000
+        hostPort      = 2000
+        protocol      = "udp"
+      }],
+      cpu : 64,
+      memory : 512,
+      memoryReservation : 256,
     },
   ])
   network_mode             = "awsvpc"
-  cpu                      = tonumber(var.app_config.cpu)
-  memory                   = tonumber(var.app_config.memory)
+  cpu                      = 1024
+  memory                   = 2048
   requires_compatibilities = ["FARGATE"]
   # tags = var.tags
   depends_on = [null_resource.dependency_getter]
@@ -59,6 +74,11 @@ resource "aws_ecs_service" "service" {
     subnets          = var.subnet_ids
     security_groups  = var.security_group_ids
     assign_public_ip = true
+  }
+  load_balancer {
+    target_group_arn = var.target_group_id
+    container_name   = var.app_config.container_name
+    container_port   = var.app_config_container_port
   }
   depends_on = [null_resource.dependency_getter]
 }

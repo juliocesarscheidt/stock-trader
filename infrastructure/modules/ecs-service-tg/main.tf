@@ -35,8 +35,8 @@ resource "aws_ecs_task_definition" "task-definition" {
           "awslogs-group"         = aws_cloudwatch_log_group.task-log-group.name,
           "awslogs-stream-prefix" = "ecs",
         }
-      }
-    }
+      },
+    },
   ])
   network_mode             = "awsvpc"
   cpu                      = tonumber(var.app_config.cpu)

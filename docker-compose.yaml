@@ -29,6 +29,7 @@ services:
       RABBITMQ_EXCHANGE: ${RABBITMQ_EXCHANGE}
       RABBITMQ_ROUTING_KEY: ${RABBITMQ_ROUTING_KEY}
       FLASK_ENV: development
+      AWS_XRAY_DAEMON_ADDRESS: xray-daemon:2000
     networks:
       - subnet_0
     restart: on-failure
@@ -88,6 +89,23 @@ services:
       RABBITMQ_QUEUE: ${RABBITMQ_QUEUE}
       RABBITMQ_EXCHANGE: ${RABBITMQ_EXCHANGE}
       RABBITMQ_ROUTING_KEY: ${RABBITMQ_ROUTING_KEY}
+    networks:
+      - subnet_0
+    restart: on-failure
+
+  xray-daemon:
+    container_name: xray-daemon
+    hostname: xray-daemon
+    image: juliocesarmidia/xray-daemon:latest
+    build:
+      context: ./xray-daemon
+    ports:
+      - 2000:2000/tcp
+      - 2000:2000/udp
+    environment:
+      AWS_REGION: ${AWS_REGION}
+      AWS_ACCESS_KEY_ID: ${AWS_ACCESS_KEY_ID}
+      AWS_SECRET_ACCESS_KEY: ${AWS_SECRET_ACCESS_KEY}
     networks:
       - subnet_0
     restart: on-failure

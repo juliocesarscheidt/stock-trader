@@ -4,9 +4,8 @@ import pika
 import urllib3
 import time
 
-from pymongo import MongoClient
-from urllib.parse import urljoin, unquote_plus
 from threading import Thread
+from pymongo import MongoClient
 
 from modules.mongo import MongoConnection
 from modules.utils import get_http_client

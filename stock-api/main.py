@@ -6,6 +6,8 @@ from pymongo import MongoClient
 from flask import Flask
 from flask_restful import Api
 from flask_cors import CORS
+from aws_xray_sdk.core import xray_recorder, patch_all
+from aws_xray_sdk.ext.flask.middleware import XRayMiddleware
 
 from modules.stocks import LastStocks, LastStocksByCountry, LastStockByName, LastStockByCountryAndName
 from modules.health import Health
@@ -16,6 +18,18 @@ from modules.logger import log
 app = Flask(__name__)
 cors = CORS(app)
 api = Api(app)
+
+AWS_XRAY_DAEMON_ADDRESS = os.environ.get('AWS_XRAY_DAEMON_ADDRESS')
+
+xray_recorder.configure(
+  service='stock-api',
+  sampling=False,
+  context_missing='LOG_ERROR',
+  plugins=('ECSPlugin',),
+  daemon_address=AWS_XRAY_DAEMON_ADDRESS,
+)
+XRayMiddleware(app, xray_recorder)
+patch_all()
 
 if __name__ in '__main__':
   log('[INFO] Starting API...')

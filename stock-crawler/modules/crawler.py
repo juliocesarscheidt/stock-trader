@@ -1,18 +1,7 @@
-import json
-
 from bs4 import BeautifulSoup
 
 from .logger import log
-from .utils import convert_value_to_float
-
-def get_dolar_price(http_client) -> float:
-  code = 'USD-BRL'
-  api_uri = 'https://economia.awesomeapi.com.br/all'
-  response = http_client.request('GET', f'{api_uri}/{code}')
-  if not (response.status >= 200 and response.status < 300):
-    return None
-  data = json.loads(response.data)
-  return convert_value_to_float(data['USD']['ask'])
+from .utils import convert_value_to_float, get_dolar_price
 
 def get_url_from_country(country: str) -> str:
   url = 'https://statusinvest.com.br/acoes'

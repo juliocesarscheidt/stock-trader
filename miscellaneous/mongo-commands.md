@@ -44,6 +44,7 @@ db.history.dropIndex({ name: -1 })
 # find a history by name and order by date desc
 db.history.find({ name : "itub4" }).sort({ date: -1 }).pretty().skip(0).limit(1);
 
+
 # find all last histories grouping by name and order by date desc
 db.history.aggregate(
   [
@@ -127,6 +128,48 @@ db.history.aggregate(
         name: 1,
         country: 1
       }
+    }
+  ]
+)
+
+
+# find all stocks by name, grouping by name and date
+db.history.aggregate(
+  [
+    {
+      $match: { "name": "itub4" }
+    }, {
+      $project: {
+        _id: "$object_id",
+        name: 1,
+        country: 1,
+        price: 1,
+        date: {
+          $dateToString: {
+            format: "%Y-%m-%d", date: {
+              $dateFromString: { dateString: "$date" },
+            },
+          },
+        },
+      }
+    }, {
+      $group: {
+        _id: ["$name", "$date"],
+        name: { $last: "$name" },
+        country: { $last: "$country" },
+        price: { $last: "$price" },
+        date: { $last: "$date" },
+      }
+    }, {
+      $project: {
+        _id: "$object_id",
+        name: 1,
+        country: 1,
+        price: 1,
+        date: 1
+      }
+    }, {
+       $sort: { name: 1, date: -1,  },
     }
   ]
 )

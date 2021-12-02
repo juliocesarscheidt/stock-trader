@@ -24,3 +24,4 @@ toml==0.10.2
 virtualenv==20.9.0
 wrapt==1.13.2
 tox==3.24.4
+tenacity==8.0.1

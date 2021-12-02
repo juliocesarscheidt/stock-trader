@@ -25,7 +25,7 @@ jobs:
     - name: Lint stock-ui with eslint
       uses: actions/setup-node@v1
       run: |
-        yarn run eslint ./stock-ui
+        yarn run lint ./stock-ui
 
     - name: Build Docker image stock-crawler
       uses: docker/build-push-action@v1

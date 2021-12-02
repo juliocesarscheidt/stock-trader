@@ -6,7 +6,7 @@ on:
 
 jobs:
   build:
-    name: Build PR
+    name: Test and Build
     runs-on: ubuntu-latest
     steps:
     - name: Check out
@@ -14,24 +14,18 @@ jobs:
 
     - name: Lint stock-crawler with black
       uses: actions/setup-python@v2
-      with:
-        path: ./stock-crawler
-        run: |
-          docker container run --rm -it -v $PWD/:/src --entrypoint "" cytopia/black:latest-0.2 sh -c "black --check -v /src"
+      run: |
+        docker container run --rm -it -v ./stock-crawler/:/src --entrypoint "" cytopia/black:latest-0.2 sh -c "black --check -v /src"
 
     - name: Lint stock-api with black
       uses: actions/setup-python@v2
-      with:
-        path: ./stock-api
-        run: |
-          docker container run --rm -it -v $PWD/:/src --entrypoint "" cytopia/black:latest-0.2 sh -c "black --check -v /src"
+      run: |
+        docker container run --rm -it -v ./stock-api/:/src --entrypoint "" cytopia/black:latest-0.2 sh -c "black --check -v /src"
 
     - name: Lint stock-ui with eslint
       uses: actions/setup-node@v1
-      with:
-        path: ./stock-ui
-        run: |
-          yarn run eslint
+      run: |
+        yarn run eslint ./stock-ui
 
     - name: Build Docker image stock-crawler
       uses: docker/build-push-action@v1

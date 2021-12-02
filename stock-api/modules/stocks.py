@@ -19,30 +19,30 @@ RETRY_MAX_ATTEMPS = int(os.environ.get("RETRY_MAX_ATTEMPS", "3"))
 
 
 class Stock(Resource):
-    mongoConnection = None
+    mongo_connection = None
 
     def __init__(self):
         self.connect_mongo_and_get_collection()
 
     def connect_mongo_and_get_collection(self):
-        self.mongoConnection = MongoConnection(MONGO_URI)
-        log(self.mongoConnection.history_collection)
+        self.mongo_connection = MongoConnection(MONGO_URI)
+        log(self.mongo_connection.history_collection)
         try:
-            if self.mongoConnection.history_collection is None:
-                self.mongoConnection.connect_mongo_and_get_collection()
+            if self.mongo_connection.history_collection is None:
+                self.mongo_connection.connect_mongo_and_get_collection()
         except Exception as e:
             log(e)
             raise e
 
     def find_last_stock(self, args: dict):
         data = None
-        log(self.mongoConnection.history_collection)
+        log(self.mongo_connection.history_collection)
         try:
-            if self.mongoConnection.history_collection is None:
+            if self.mongo_connection.history_collection is None:
                 self.connect_mongo_and_get_collection()
             # sort descending
             histories = (
-                self.mongoConnection.history_collection.find(args)
+                self.mongo_connection.history_collection.find(args)
                 .sort("date", -1)
                 .skip(0)
                 .limit(1)
@@ -113,12 +113,12 @@ class Stock(Resource):
             match = {"$match": {"country": country}}
             pipeline.insert(0, match)
 
-        log(self.mongoConnection.history_collection)
+        log(self.mongo_connection.history_collection)
         try:
-            if self.mongoConnection.history_collection is None:
+            if self.mongo_connection.history_collection is None:
                 self.connect_mongo_and_get_collection()
             # sort descending
-            histories = self.mongoConnection.history_collection.aggregate(pipeline)
+            histories = self.mongo_connection.history_collection.aggregate(pipeline)
             log(histories)
             # this will receive a cursor
             for history in histories:

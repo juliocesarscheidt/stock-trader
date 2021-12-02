@@ -12,20 +12,33 @@ jobs:
     - name: Check out
       uses: actions/checkout@v2
 
+    - name: Setup python linter
+      uses: actions/setup-python@v2
+      with:
+        python-version: 3.9
+        path: ./stock-crawler
     - name: Lint stock-crawler with black
-      uses: actions/setup-python@v2
       run: |
-        docker container run --rm -it -v ./stock-crawler/:/src --entrypoint "" cytopia/black:latest-0.2 sh -c "black --check -v /src"
+        docker container run --rm -it -v ./:/src --entrypoint "" cytopia/black:latest-0.2 sh -c "black --check -v /src"
 
+    - name: Setup python linter
+      uses: actions/setup-python@v2
+      with:
+        python-version: 3.9
+        path: ./stock-api
     - name: Lint stock-api with black
-      uses: actions/setup-python@v2
       run: |
-        docker container run --rm -it -v ./stock-api/:/src --entrypoint "" cytopia/black:latest-0.2 sh -c "black --check -v /src"
+        docker container run --rm -it -v ./:/src --entrypoint "" cytopia/black:latest-0.2 sh -c "black --check -v /src"
 
-    - name: Lint stock-ui with eslint
+    - name: Setup javascript linter
       uses: actions/setup-node@v1
-      run: |
-        yarn run lint ./stock-ui
+      with:
+        node-version: 16.x
+        path: ./stock-ui
+    - name: Install dependencies
+      run: yarn install
+    - name: Lint stock-ui with eslint
+      run: yarn run lint
 
     - name: Build Docker image stock-crawler
       uses: docker/build-push-action@v1

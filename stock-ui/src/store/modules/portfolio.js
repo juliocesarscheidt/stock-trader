@@ -50,7 +50,7 @@ export default  {
       state.balance -= price
       setBalanceOnStorage(state.balance)
     },
-    sellStock(state, { stockId, stockName, stockPrice, amount }) {
+    sellStock(state, { stockName, stockPrice, amount }) {
       const price = parseFloat(stockPrice * amount)
       const record = state.stocksPortfolio[this.getters.country].find(s => s.name === stockName)
       if (!record) return

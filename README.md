@@ -18,9 +18,11 @@ This will start all services locally, then access the UI on <http://localhost:80
 ```bash
 # infrastructure
 docker-compose up -d --build mongo rabbitmq xray-daemon
+docker-compose logs -f --tail 50 mongo rabbitmq xray-daemon
 
 # services
 docker-compose up -d --build stock-crawler stock-api stock-ui
+docker-compose logs -f --tail 50 stock-crawler stock-api stock-ui
 ```
 
 ### Cloud

@@ -1,4 +1,4 @@
-const currency = value => `US$ ${value.toLocaleString()}`
+const currency = value => `US$ ${parseFloat(value).toFixed(2).toLocaleString()}`
 
 export {
   currency

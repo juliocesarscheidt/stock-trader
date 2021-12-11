@@ -9,6 +9,7 @@ services:
       context: ./stock-crawler
     environment:
       MONGO_URI: mongodb://${MONGO_INITDB_ROOT_USERNAME}:${MONGO_INITDB_ROOT_PASSWORD}@mongo:27017
+      MONGO_DATABASE: ${MONGO_DATABASE}
       RABBITMQ_URI: amqp://${RABBITMQ_USERNAME}:${RABBITMQ_PASSWORD}@rabbitmq/?heartbeat=30
       RABBITMQ_QUEUE: ${RABBITMQ_QUEUE}
     networks:
@@ -25,14 +26,26 @@ services:
       - 5050:5050
     environment:
       MONGO_URI: mongodb://${MONGO_INITDB_ROOT_USERNAME}:${MONGO_INITDB_ROOT_PASSWORD}@mongo:27017
+      MONGO_DATABASE: ${MONGO_DATABASE}
       RABBITMQ_URI: amqp://${RABBITMQ_USERNAME}:${RABBITMQ_PASSWORD}@rabbitmq/?heartbeat=30
       RABBITMQ_EXCHANGE: ${RABBITMQ_EXCHANGE}
       RABBITMQ_ROUTING_KEY: ${RABBITMQ_ROUTING_KEY}
-      FLASK_ENV: development
       AWS_XRAY_DAEMON_ADDRESS: xray-daemon:2000
+      PYTHONDONTWRITEBYTECODE: 1
+      PYTHONUNBUFFERED: 1
+      FLASK_ENV: development
+      FLASK_APP: /usr/src/app/stock/entrypoint/flask_app.py
+      FLASK_DEBUG: 0
+    entrypoint:
+      - flask
+      - run
+      - --host=0.0.0.0
+      - --port=5050
     networks:
       - subnet_0
     restart: on-failure
+    volumes:
+      - ./stock-api/src:/usr/src/app:rw
 
   stock-ui:
     container_name: stock-ui
@@ -61,7 +74,7 @@ services:
     ports:
       - 28017:27017
     environment:
-      MONGO_INITDB_DATABASE: stocks
+      MONGO_INITDB_DATABASE: ${MONGO_DATABASE}
       MONGO_INITDB_ROOT_USERNAME: ${MONGO_INITDB_ROOT_USERNAME}
       MONGO_INITDB_ROOT_PASSWORD: ${MONGO_INITDB_ROOT_PASSWORD}
     networks:

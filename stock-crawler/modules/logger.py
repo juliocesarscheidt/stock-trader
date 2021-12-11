@@ -3,8 +3,8 @@ import logging
 
 def log(msg):
     logging.basicConfig(
-        level=logging.DEBUG,
+        level=logging.INFO,
         format="%(asctime)s %(levelname)s %(name)s %(threadName)s : %(message)s",
     )
     logger = logging.getLogger()
-    logger.debug(msg)
+    logger.info(msg)

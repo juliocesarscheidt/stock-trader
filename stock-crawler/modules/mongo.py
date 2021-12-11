@@ -6,6 +6,7 @@ from .logger import log
 
 MONGODB_TIMEOUT_SECONDS = int(os.environ.get("MONGODB_TIMEOUT_SECONDS", "5"))
 MONGODB_POOL_SIZE = int(os.environ.get("MONGODB_POOL_SIZE", "10"))
+MONGO_DATABASE = os.environ.get("MONGO_DATABASE", "stocks")
 
 
 class MongoConnection:
@@ -30,7 +31,7 @@ class MongoConnection:
             if self.mongo_client is None:
                 self.mongo_client = self.get_mongo_client()
 
-            self.history_collection = self.mongo_client["stocks"]["history"]
+            self.history_collection = self.mongo_client[MONGO_DATABASE]["history"]
         except Exception as e:
             log(e)
             raise e

@@ -20,6 +20,7 @@ yarn-error.log*
 *.sln
 *.sw*
 
+*.pyc
 __pycache__
 *.log
 logs

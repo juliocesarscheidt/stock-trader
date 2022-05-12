@@ -26,13 +26,15 @@ xray_recorder.configure(
 XRayMiddleware(app, xray_recorder)
 patch_all()
 
-api.add_resource(HealthcheckRoute, "/api/v1/health")
-api.add_resource(LastStocksRoute, "/api/v1/stocks/last")
-api.add_resource(LastStockByNameRoute, "/api/v1/stocks/last/<string:name>")
-api.add_resource(LastStocksByCountryRoute, "/api/v1/stocks/<string:country>/last")
+api.add_resource(HealthcheckRoute, "/api/healthcheck")
+api.add_resource(LastStocksRoute, "/api/stocks/last")
+api.add_resource(LastStockByNameRoute, "/api/stocks/last/<string:name>")
+api.add_resource(LastStocksByCountryRoute, "/api/stocks/<string:country>/last")
 api.add_resource(
-    LastStockByCountryNameRoute, "/api/v1/stocks/<string:country>/last/<string:name>"
+    LastStockByCountryNameRoute, "/api/stocks/<string:country>/last/<string:name>"
 )
 
 # start API (done by flask run command on entrypoint)
 # app.run(host="0.0.0.0", port="5050", debug=True)
+# or through terminal
+# FLASK_ENV=development FLASK_APP=src/stock/entrypoint/flask_app.py python -m flask run --host=0.0.0.0 --port=5050

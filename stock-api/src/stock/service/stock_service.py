@@ -22,7 +22,6 @@ class StockService:
             # publish to queue, to be crawled, only if there is a country specified
             if "country" not in args:
                 return
-
             try:
                 log("Publishing {}".format(str(args)))
                 self.publisher.publish(

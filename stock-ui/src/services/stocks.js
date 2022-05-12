@@ -2,7 +2,7 @@ import axios from 'axios'
 
 const getLastStocksByCountry = async (country='br') => {
   return axios
-    .get(`/api/v1/stocks/${country}/last`)
+    .get(`/api/stocks/${country}/last`)
     .then((response) => {
       if (!response.data.data) {
         return null
@@ -19,7 +19,7 @@ const getLastStocksByCountry = async (country='br') => {
 
 const getLastStockByCountryAndName = async (country, name) => {
   return axios
-    .get(`/api/v1/stocks/${country}/last/${name}`)
+    .get(`/api/stocks/${country}/last/${name}`)
     .then((response) => {
       if (!response.data.data) {
         return null

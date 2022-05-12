@@ -11,25 +11,14 @@ jobs:
     steps:
     - name: Check out
       uses: actions/checkout@v2
-
-    - name: Setup python linter
-      uses: actions/setup-python@v2
-      with:
-        python-version: 3.9
     - name: Lint stock-crawler with black
       working-directory: ./stock-crawler
       run: |
-        docker container run --rm -v $PWD/:/src --entrypoint "" cytopia/black:latest-0.2 sh -c "black --check -v /src"
-
-    - name: Setup python linter
-      uses: actions/setup-python@v2
-      with:
-        python-version: 3.9
+        make lint-app
     - name: Lint stock-api with black
       working-directory: ./stock-api
       run: |
-        docker container run --rm -v $PWD/:/src --entrypoint "" cytopia/black:latest-0.2 sh -c "black --check -v /src"
-
+        make lint-app
     - name: Setup javascript linter
       uses: actions/setup-node@v1
       with:
@@ -39,7 +28,6 @@ jobs:
       run: |
         yarn install
         yarn run lint
-
     - name: Build Docker image stock-crawler
       uses: docker/build-push-action@v1
       with:
@@ -49,7 +37,6 @@ jobs:
         repository: juliocesarmidia/stock-crawler
         tag_with_ref: false
         tag_with_sha: true
-
     - name: Build Docker image stock-api
       uses: docker/build-push-action@v1
       with:
@@ -59,7 +46,6 @@ jobs:
         repository: juliocesarmidia/stock-api
         tag_with_ref: false
         tag_with_sha: true
-
     - name: Build Docker image stock-ui
       uses: docker/build-push-action@v1
       with:
@@ -93,7 +79,6 @@ jobs:
           --env GITHUB_COMMENT_FORMAT="<b>Comment</b><br/>{{.}}" \
           --env GITHUB_COMMENT="The build of commit $GITHUB_SHA has failed" \
           cloudposse/github-commenter:latest
-
     - name: The job has succeeded
       if: ${{ success() }}
       run: |

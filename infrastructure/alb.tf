@@ -53,7 +53,7 @@ resource "aws_alb_target_group" "stock-api-tg" {
     timeout             = 30
     interval            = 60
     matcher             = "200-299"
-    path                = "/api/v1/health"
+    path                = "/api/healthcheck"
     protocol            = "HTTP"
     port                = var.app_config_stock_api_container_port
   }

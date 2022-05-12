@@ -12,7 +12,6 @@ MONGO_URI = os.environ.get("MONGO_URI")
 
 if __name__ in "__main__":
     log("[INFO] Starting Crawler...")
-
     http_client = get_http_client()
 
     mongo_connection = MongoConnection(MONGO_URI)

@@ -14,7 +14,7 @@ tags:
     description: Stocks Resource
 
 paths:
-  /api/v1/health:
+  /api/healthcheck:
     get:
       tags:
         - Health
@@ -28,7 +28,7 @@ paths:
         '500':
           description: Internal Server Error
 
-  /api/v1/stocks/last:
+  /api/stocks/last:
     get:
       tags:
         - Stocks
@@ -46,7 +46,7 @@ paths:
         '500':
           description: Internal Server Error
 
-  /api/v1/stocks/last/{name}:
+  /api/stocks/last/{name}:
     get:
       tags:
         - Stocks
@@ -68,7 +68,7 @@ paths:
         '500':
           description: Internal Server Error
 
-  /api/v1/stocks/{country}/last:
+  /api/stocks/{country}/last:
     get:
       tags:
         - Stocks
@@ -92,7 +92,7 @@ paths:
         '500':
           description: Internal Server Error
 
-  /api/v1/stocks/{country}/last/{name}:
+  /api/stocks/{country}/last/{name}:
     get:
       tags:
         - Stocks

@@ -114,19 +114,41 @@ db.history.aggregate(
   ]
 )
 
+# get stocks names
 db.history.aggregate(
   [
+    {"$sort": {"date": 1}},
     {
-      $group: {
+      "$group": {
         _id: ["$name", "$country"],
         name: { $first: "$name" },
         country: { $first: "$country" }
       }
     }, {
-      $project: {
+      "$project": {
         _id: 0,
         name: 1,
         country: 1
+      }
+    }
+  ]
+)
+
+# count
+db.history.aggregate(
+  [
+    {"$sort": {"date": 1}},
+    {
+      "$group": {
+        _id: ["$name", "$country"],
+        name: { $first: "$name" },
+        country: { $first: "$country" }
+      }
+    },  {
+      "$count": "name"
+    }, {
+      "$project": {
+        "counter": "$name"
       }
     }
   ]
